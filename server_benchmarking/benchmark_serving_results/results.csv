@@ -1,2 +1,0 @@
-model_name,gpu_type,input_tokens,output_tokens,qps,best_of,use_beam_search,num_prompts,mean_latency,p50_latency,p90_latency,p95_latency,p99_latency,p100_latency
-mistralai/Mistral-7B-v0.1,4xA4000,200,100,5.0,1,False,20,2.201087339146761,2.2634472724748775,2.373991125798784,2.377936461131321,2.391658977071056,2.39508960605599

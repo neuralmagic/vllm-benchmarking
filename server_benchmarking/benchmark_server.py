@@ -153,12 +153,13 @@ def main(args: argparse.Namespace):
     tokenizer = get_tokenizer(args.tokenizer,
                               trust_remote_code=args.trust_remote_code)
     
-    input_requests, num_input_tokens, num_output_tokens =  make_synthetic_requests(
+    input_requests, num_input_tokens, num_output_tokens = make_synthetic_requests(
             num_input_words=args.num_input_words,
             num_output_tokens=args.num_output_tokens,
             num_requests=args.num_prompts,
             tokenizer=tokenizer,
         )
+    print(f"QPS: {args.request_rate}")
     print(f"Num input tokens: {num_input_tokens}")
     print(f"Num output tokens: {num_output_tokens}")
 
@@ -206,7 +207,7 @@ def main(args: argparse.Namespace):
           f"{avg_per_output_token_latency:.3f} s")
 
     df = pd.DataFrame.from_dict([latency_results])
-    results_dir = f"results"
+    results_dir = f"results_{args.gpu_type}"
     if not os.path.isdir(results_dir):
         os.makedirs(results_dir)
     csv_path = f"{results_dir}/results.csv"

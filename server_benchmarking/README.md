@@ -10,3 +10,11 @@ python3 vllm/entrypoints/api_server.py \
     --max-model-len 2048 \
     --disable-log-requests
 ```
+
+#### Run Benchmark
+
+Set the proper variables for your setup in `benchmark_server.sh`
+
+```bash
+bash ./benchmark_server.sh
+```
