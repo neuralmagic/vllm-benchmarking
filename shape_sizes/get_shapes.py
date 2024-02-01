@@ -43,11 +43,14 @@ def get_projections(llm, layer_idx=0, attn_modules=["qkv_proj", "o_proj"], mlp_m
     return projections
 
 def get_shape_and_tp_dim(name, module):
-    if not hasattr(module, "weight"):
-        raise ValueError("Require Unquantized Model")
-    if module.weight.dtype != torch.float16 and module.weight.dtype != torch.bfloat16:
-        raise ValueError("Require Unquantized Model")
-    
+    if hasattr(module, "weight"):
+        shape = list(module.weight.T.shape)
+    elif hasattr(module, "qweight"):
+        print("----- QUANTIZED -----")
+        shape = [module.input_size, module.output_size]
+    else:
+        raise ValueError("Unknown weight type")
+
     if isinstance(module, RowParallelLinear):
         tp_dim = "row_parallel"
     elif isinstance(module, QKVParallelLinear) or isinstance(module, MergedColumnParallelLinear):
@@ -55,7 +58,7 @@ def get_shape_and_tp_dim(name, module):
     else:
         raise ValueError("Unknown Linear Type")
 
-    return list(module.weight.T.shape), tp_dim
+    return list(shape), tp_dim
 
 if __name__ == "__main__":
     args = parser.parse_args()
