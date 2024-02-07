@@ -35,8 +35,7 @@ import aiohttp
 import numpy as np
 import pandas as pd
 from tqdm.asyncio import tqdm
-from transformers import PreTrainedTokenizerBase
-from vllm.transformers_utils.tokenizer import get_tokenizer
+from transformers import PreTrainedTokenizerBase, AutoTokenizer
 
 # (prompt len, output len, latency)
 REQUEST_LATENCY: List[Tuple[int, int, float]] = []
@@ -150,7 +149,7 @@ def main(args: argparse.Namespace):
     np.random.seed(args.seed)
 
     api_url = f"{args.protocol}://{args.host}:{args.port}{args.endpoint}"
-    tokenizer = get_tokenizer(args.tokenizer,
+    tokenizer = AutoTokenizer.from_pretrained(args.tokenizer,
                               trust_remote_code=args.trust_remote_code)
     
     input_requests, num_input_tokens, num_output_tokens = make_synthetic_requests(
